@@ -3,12 +3,15 @@ import { RouterProvider } from "react-router";
 import { router } from "./app.routes";
 import "./style.css";
 import { AuthProvider } from "./features/auth/auth.context";
+import { InterviewContextProvider } from "./features/interview/interview.context";
 
 const App = () => {
   return (
     <div>
       <AuthProvider>
-        <RouterProvider router={router} />
+        <InterviewContextProvider>
+          <RouterProvider router={router} />
+        </InterviewContextProvider>
       </AuthProvider>
     </div>
   );

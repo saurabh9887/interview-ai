@@ -8,7 +8,6 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router";
 import { useAuth } from "../hooks/useAuth";
-import Loader from "@/components/Loader";
 
 const registerSchema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters"),
@@ -29,73 +28,103 @@ const Register = () => {
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
-    if (loader) <Loader />;
-    const res = await handleRegister({
-      username: data.username,
-      email: data.email,
-      password: data.password,
-    });
-
+    const res = await handleRegister(data);
     if (res) navigate("/");
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <Card className="w-full max-w-sm shadow-lg py-6">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-2xl text-center">Register</CardTitle>
-        </CardHeader>
+    <main className="min-h-screen grid md:grid-cols-2">
+      {/* Left Side (Branding / Value Prop) */}
+      <div className="hidden md:flex flex-col justify-center px-16 bg-gray-50">
+        <h1 className="text-4xl font-bold mb-6">Start Preparing Smarter</h1>
+        <p className="text-gray-600 mb-6">
+          Upload your resume, paste the job description, and get a precise
+          interview plan tailored to what actually matters.
+        </p>
 
-        <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-            <div className="space-y-2">
-              <Label>Username</Label>
-              <Input {...register("username")} placeholder="Enter username" />
-              {errors.username && (
-                <p className="text-sm text-red-500">
-                  {errors.username.message}
-                </p>
-              )}
-            </div>
+        <div className="space-y-4">
+          <div className="flex items-center gap-3">
+            <div className="h-2 w-2 bg-black rounded-full" />
+            <p className="text-gray-700">Know your exact skill gaps</p>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="h-2 w-2 bg-black rounded-full" />
+            <p className="text-gray-700">Get real interview questions</p>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="h-2 w-2 bg-black rounded-full" />
+            <p className="text-gray-700">Follow a structured prep roadmap</p>
+          </div>
+        </div>
+      </div>
 
-            <div className="space-y-2">
-              <Label>Email</Label>
-              <Input {...register("email")} placeholder="Enter email" />
-              {errors.email && (
-                <p className="text-sm text-red-500">{errors.email.message}</p>
-              )}
-            </div>
+      {/* Right Side (Form) */}
+      <div className="flex items-center justify-center px-6">
+        <Card className="w-full max-w-md shadow-xl rounded-2xl py-8">
+          <CardHeader className="pb-4">
+            <CardTitle className="text-2xl text-center">
+              Create your account
+            </CardTitle>
+            <p className="text-sm text-gray-500 text-center">
+              Start your personalized interview preparation
+            </p>
+          </CardHeader>
 
-            <div className="space-y-2">
-              <Label>Password</Label>
-              <Input
-                type="password"
-                {...register("password")}
-                placeholder="Enter password"
-              />
-              {errors.password && (
-                <p className="text-sm text-red-500">
-                  {errors.password.message}
-                </p>
-              )}
-            </div>
+          <CardContent>
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+              <div className="space-y-2">
+                <Label>Username</Label>
+                <Input {...register("username")} placeholder="john_doe" />
+                {errors.username && (
+                  <p className="text-sm text-red-500">
+                    {errors.username.message}
+                  </p>
+                )}
+              </div>
 
-            <Button type="submit" className="w-full cursor-pointer">
-              Register
-            </Button>
-          </form>
+              <div className="space-y-2">
+                <Label>Email</Label>
+                <Input {...register("email")} placeholder="you@example.com" />
+                {errors.email && (
+                  <p className="text-sm text-red-500">{errors.email.message}</p>
+                )}
+              </div>
 
-          <p className="text-sm text-center text-muted-foreground mt-4">
-            Already have an account?{" "}
-            <Link
-              to="/login"
-              className="text-primary hover:underline cursor-pointer"
-            >
-              Login
-            </Link>
-          </p>
-        </CardContent>
-      </Card>
+              <div className="space-y-2">
+                <Label>Password</Label>
+                <Input
+                  type="password"
+                  {...register("password")}
+                  placeholder="••••••••"
+                />
+                {errors.password && (
+                  <p className="text-sm text-red-500">
+                    {errors.password.message}
+                  </p>
+                )}
+              </div>
+
+              <Button
+                type="submit"
+                className="w-full cursor-pointer"
+                disabled={loader}
+              >
+                {loader ? "Creating account..." : "Create Account"}
+              </Button>
+            </form>
+
+            <p className="text-sm text-center text-muted-foreground mt-6">
+              Already have an account?{" "}
+              <Link
+                to="/login"
+                className="text-primary hover:underline cursor-pointer"
+              >
+                Login
+              </Link>
+            </p>
+          </CardContent>
+        </Card>
+      </div>
     </main>
   );
 };

@@ -3,12 +3,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
-import z from "zod";
+import { z } from "zod";
 import { useAuth } from "../hooks/useAuth";
-import Loader from "@/components/Loader";
 
 const LoginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -20,85 +18,111 @@ const Login = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
-    resolver: zodResolver(LoginSchema),
-  });
+  } = useForm({ resolver: zodResolver(LoginSchema) });
+
   const navigate = useNavigate();
   const { loading, handleLogin } = useAuth();
 
-  // const handleFormSubmit = async () => {
-  //   e.preventDefault();
-  //   await handleLogin({ email: loginObj.email, password: loginObj.password });
-  //   navigate("/");
-  // };
-
   const onSubmit = async (data) => {
-    try {
-      const res = await handleLogin({
-        email: data.email,
-        password: data.password,
-      });
-      if (res) navigate("/");
-    } catch (error) {
-      console.log(error);
-    }
+    const res = await handleLogin(data);
+    if (res) navigate("/dashboard");
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <Card className="w-full max-w-sm shadow-lg">
-        <CardHeader>
-          <CardTitle className="text-2xl text-center">Login</CardTitle>
-        </CardHeader>
+    <main className="min-h-screen grid md:grid-cols-2">
+      {/* Left Side (Value Proposition) */}
+      <div className="hidden md:flex flex-col justify-center px-16 bg-gray-50">
+        <h1 className="text-4xl font-bold mb-6">
+          Your Interview Plan Is Waiting
+        </h1>
+        <p className="text-gray-600 mb-6">
+          Log in to continue your personalized, AI-driven preparation and stay
+          ahead.
+        </p>
 
-        <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-            {/* Email */}
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="Enter email address"
-                {...register("email")}
-              />
-              {errors.email && (
-                <p className="text-sm text-red-500">{errors.email.message}</p>
-              )}
-            </div>
+        <div className="space-y-4">
+          <div className="flex items-center gap-3">
+            <div className="h-2 w-2 bg-black rounded-full" />
+            <p className="text-gray-700">Track your progress</p>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="h-2 w-2 bg-black rounded-full" />
+            <p className="text-gray-700">Improve weak areas</p>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="h-2 w-2 bg-black rounded-full" />
+            <p className="text-gray-700">Stay consistent with prep</p>
+          </div>
+        </div>
+      </div>
 
-            {/* Password */}
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="Enter password"
-                {...register("password")}
-              />
-              {errors.password && (
-                <p className="text-sm text-red-500">
-                  {errors.password.message}
+      {/* Right Side (Login Form) */}
+      <div className="flex items-center justify-center px-6">
+        <Card className="w-full max-w-md shadow-xl rounded-2xl py-8">
+          <CardHeader className="pb-4">
+            <CardTitle className="text-2xl text-center">
+              Login to your account
+            </CardTitle>
+            <p className="text-sm text-gray-500 text-center">
+              Continue your interview preparation
+            </p>
+          </CardHeader>
+
+          <CardContent>
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+              {/* Email */}
+              <div className="space-y-2">
+                <Label>Email</Label>
+                <Input {...register("email")} placeholder="you@example.com" />
+                {errors.email && (
+                  <p className="text-sm text-red-500">{errors.email.message}</p>
+                )}
+              </div>
+
+              {/* Password */}
+              <div className="space-y-2">
+                <Label>Password</Label>
+                <Input
+                  type="password"
+                  {...register("password")}
+                  placeholder="••••••••"
+                />
+                {errors.password && (
+                  <p className="text-sm text-red-500">
+                    {errors.password.message}
+                  </p>
+                )}
+
+                <p className="text-sm text-right">
+                  <span className="text-primary cursor-pointer hover:underline">
+                    Forgot password?
+                  </span>
                 </p>
-              )}
-            </div>
+              </div>
 
-            {/* Button */}
-            <Button className="w-full cursor-pointer">Login</Button>
-          </form>
+              {/* Button */}
+              <Button
+                type="submit"
+                className="w-full h-11 cursor-pointer"
+                disabled={loading}
+              >
+                {loading ? "Logging in..." : "Login"}
+              </Button>
+            </form>
 
-          {/* Footer */}
-          <p className="text-sm text-center text-muted-foreground mt-4">
-            Don&apos;t have an account?{" "}
-            <Link
-              to="/register"
-              className="text-primary font-medium hover:underline cursor-pointer"
-            >
-              Register
-            </Link>
-          </p>
-        </CardContent>
-      </Card>
+            {/* Footer */}
+            <p className="text-sm text-center text-muted-foreground mt-6">
+              Don’t have an account?{" "}
+              <Link
+                to="/register"
+                className="text-primary hover:underline cursor-pointer"
+              >
+                Register
+              </Link>
+            </p>
+          </CardContent>
+        </Card>
+      </div>
     </main>
   );
 };

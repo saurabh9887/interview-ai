@@ -3,6 +3,11 @@ import Login from "./features/auth/pages/Login";
 import Register from "./features/auth/pages/Register";
 import ProtectedRoute from "./features/auth/components/protectedRoute";
 import HomeUI from "./features/interview/pages/Home";
+import Interview from "./features/interview/pages/Interview";
+import { AppLayout } from "./components/AppLayout";
+import LandingPage from "./components/LandingPage";
+import Dashboard from "./components/dashboard";
+import ReportsPage from "./features/interview/pages/Reports";
 
 export const router = createBrowserRouter([
   {
@@ -10,23 +15,44 @@ export const router = createBrowserRouter([
     element: <Login />,
   },
   {
-    path: "register",
+    path: "/register",
     element: <Register />,
   },
   {
     path: "/",
+    element: <LandingPage />,
+  },
+  {
+    path: "/interview/:interviewID",
     element: (
       <ProtectedRoute>
-        <h1>Home page</h1>
+        <Interview />
       </ProtectedRoute>
     ),
   },
   {
-    path: "/interview-home",
     element: (
       <ProtectedRoute>
-        <HomeUI />
+        <AppLayout />
       </ProtectedRoute>
     ),
+    children: [
+      {
+        path: "/dashboard",
+        element: <Dashboard />,
+      },
+      {
+        path: "/generate-report",
+        element: <HomeUI />,
+      },
+      // {
+      //   path: "/interview/:interviewID",
+      //   element: <Interview />,
+      // },
+      {
+        path: "/reports",
+        element: <ReportsPage />,
+      },
+    ],
   },
 ]);

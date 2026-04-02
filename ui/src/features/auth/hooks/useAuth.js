@@ -10,7 +10,6 @@ export const useAuth = () => {
   }, []);
 
   const handleLogin = async ({ email, password }) => {
-    debugger;
     setLoader(true);
 
     try {
