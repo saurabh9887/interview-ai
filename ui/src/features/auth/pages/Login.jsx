@@ -7,6 +7,9 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import { z } from "zod";
 import { useAuth } from "../hooks/useAuth";
+import Loader from "@/components/Loader";
+import { useContext } from "react";
+import { LoaderContext } from "@/components/LoaderContext";
 
 const LoginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -20,8 +23,10 @@ const Login = () => {
     formState: { errors },
   } = useForm({ resolver: zodResolver(LoginSchema) });
 
+  const { spinner } = useContext(LoaderContext);
+
   const navigate = useNavigate();
-  const { loading, handleLogin } = useAuth();
+  const { handleLogin } = useAuth();
 
   const onSubmit = async (data) => {
     const res = await handleLogin(data);
@@ -104,9 +109,9 @@ const Login = () => {
               <Button
                 type="submit"
                 className="w-full h-11 cursor-pointer"
-                disabled={loading}
+                disabled={spinner}
               >
-                {loading ? "Logging in..." : "Login"}
+                {spinner ? "Logging in..." : "Login"}
               </Button>
             </form>
 

@@ -1,55 +1,57 @@
 import { useContext, useEffect } from "react";
 import { AuthContext } from "../auth.context";
 import { getMe, login, logout, register } from "../services/auth.api";
+import { LoaderContext } from "@/components/LoaderContext";
 
 export const useAuth = () => {
-  const { user, setUser, loader, setLoader } = useContext(AuthContext);
+  const { user, setUser, loader } = useContext(AuthContext);
+  const { setSpinner } = useContext(LoaderContext);
 
   useEffect(() => {
     GetAndSetData();
   }, []);
 
   const handleLogin = async ({ email, password }) => {
-    setLoader(true);
+    setSpinner(true);
 
     try {
       const data = await login({ email, password });
       if (!data?.user) return false;
       setUser(data?.user);
-      setLoader(false);
+      setSpinner(false);
       return true;
     } catch (error) {
       console.log(error);
     } finally {
-      setLoader(false);
+      setSpinner(false);
     }
   };
 
   const handleRegister = async ({ username, email, password }) => {
-    setLoader(true);
+    setSpinner(true);
     try {
       const data = await register({ username, email, password });
       if (!data) return false;
       setUser(data.user);
-      setLoader(false);
+      setSpinner(false);
       return true;
     } catch (error) {
       console.log(error);
     } finally {
-      setLoader(false);
+      setSpinner(false);
     }
   };
 
   const handleLogout = async () => {
-    setLoader(true);
+    setSpinner(true);
     try {
       await logout();
       setUser(null);
-      setLoader(false);
+      setSpinner(false);
     } catch (error) {
       console.log(error);
     } finally {
-      setLoader(false);
+      setSpinner(false);
     }
   };
 
@@ -60,7 +62,7 @@ export const useAuth = () => {
     } catch (err) {
       setUser(null);
     } finally {
-      setLoader(false);
+      setSpinner(false);
     }
   };
 

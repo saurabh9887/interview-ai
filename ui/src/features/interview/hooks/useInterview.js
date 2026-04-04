@@ -6,10 +6,12 @@ import {
   getInterviewReportByID,
 } from "../services/interview.api";
 import { useNavigate } from "react-router";
+import { LoaderContext } from "@/components/LoaderContext";
 
 export const useInterview = () => {
   const context = useContext(InterviewContext);
   const navigate = useNavigate();
+  const { setSpinner } = useContext(LoaderContext);
 
   if (!context) {
     throw new Error(
@@ -25,7 +27,7 @@ export const useInterview = () => {
     selfDescription,
     resume,
   }) => {
-    setLoading(true);
+    setSpinner(true);
 
     try {
       const res = await generateInterviewReport({
@@ -35,42 +37,42 @@ export const useInterview = () => {
       });
 
       if (res) {
-        setLoading(false);
+        setSpinner(false);
         setReport(res.interviewReport);
         navigate(`/interview/${res.interviewReport._id}`);
       }
     } catch (error) {
-      setLoading(false);
+      setSpinner(false);
       console.log(error);
     }
   };
 
   const getReportByID = async (reportID) => {
-    setLoading(true);
+    setSpinner(true);
 
     try {
       const res = await getInterviewReportByID(reportID);
       if (res) {
-        setLoading(false);
+        setSpinner(false);
         setReport(res.report);
       }
     } catch (error) {
-      setLoading(false);
+      setSpinner(false);
       console.log(error);
     }
   };
 
   const getReportList = async () => {
-    setLoading(true);
+    setSpinner(true);
 
     try {
       const res = await getAllInterviewReports();
       if (res) {
-        setLoading(false);
+        setSpinner(false);
         setReportList(res.interviewReports);
       }
     } catch (error) {
-      setLoading(false);
+      setSpinner(false);
       console.log(error);
     }
   };

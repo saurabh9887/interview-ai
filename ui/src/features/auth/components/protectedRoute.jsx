@@ -4,8 +4,7 @@ import Loader from "@/components/Loader";
 import { Navigate } from "react-router";
 
 const ProtectedRoute = ({ children }) => {
-  const { loader, user } = useAuth();
-  if (loader) return <Loader />;
+  const { user } = useAuth();
 
   if (!user) return <Navigate to={"/login"} />;
   return children;
