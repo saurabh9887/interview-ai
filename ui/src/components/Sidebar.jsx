@@ -28,7 +28,7 @@ import {
   SidebarSeparator,
 } from "./ui/sidebar";
 
-import { Link, useLocation } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 
 import {
   DropdownMenu,
@@ -45,9 +45,10 @@ import {
 import { AvatarWithBadge } from "./AvatarBadge";
 import { useContext } from "react";
 import { AuthContext } from "@/features/auth/auth.context";
+import { useAuth } from "@/features/auth/hooks/useAuth";
 
 const items = [
-  { title: "Dashboard", url: "/dashboard", icon: Home },
+  // { title: "Dashboard", url: "/dashboard", icon: Home },
   { title: "Generate Report", url: "/generate-report", icon: Inbox },
   { title: "All Reports", url: "/reports", icon: Calendar },
   // { title: "Search", url: "/search", icon: Search },
@@ -57,6 +58,11 @@ const items = [
 const AppSidebar = () => {
   const location = useLocation();
   const { user } = useContext(AuthContext);
+  const { handleLogout } = useAuth();
+
+  const Logout = async () => {
+    await handleLogout();
+  };
 
   return (
     <Sidebar collapsible="icon">
@@ -188,9 +194,11 @@ const AppSidebar = () => {
               </DropdownMenuTrigger>
 
               <DropdownMenuContent align="end">
-                <DropdownMenuItem>Account</DropdownMenuItem>
-                <DropdownMenuItem>Settings</DropdownMenuItem>
-                <DropdownMenuItem>Sign Out</DropdownMenuItem>
+                {/* <DropdownMenuItem>Account</DropdownMenuItem>
+                <DropdownMenuItem>Settings</DropdownMenuItem> */}
+                <DropdownMenuItem onClick={Logout} className="cursor-pointer">
+                  Sign Out
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </SidebarMenuItem>

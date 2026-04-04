@@ -60,7 +60,7 @@ export default function ReportsPage() {
             onClick={() => navigate(`/interview/${report._id}`)}
           >
             <CardHeader>
-              <CardTitle className="text-lg">{report.title}</CardTitle>
+              <CardTitle className="text-md">{report.title}</CardTitle>
             </CardHeader>
 
             <CardContent className="space-y-4">

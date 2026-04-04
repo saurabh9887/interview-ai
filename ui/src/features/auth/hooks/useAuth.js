@@ -40,10 +40,10 @@ export const useAuth = () => {
     }
   };
 
-  const handleLogout = async ({ username, email, password }) => {
+  const handleLogout = async () => {
     setLoader(true);
     try {
-      const data = await logout();
+      await logout();
       setUser(null);
       setLoader(false);
     } catch (error) {

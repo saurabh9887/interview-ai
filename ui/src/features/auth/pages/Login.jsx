@@ -25,7 +25,7 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     const res = await handleLogin(data);
-    if (res) navigate("/dashboard");
+    if (res) navigate("/generate-report");
   };
 
   return (

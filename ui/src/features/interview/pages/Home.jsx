@@ -94,7 +94,7 @@ export default function HomeUI() {
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <span className="font-medium">Upload Resume</span>
-                  <Badge variant="secondary">Best Results</Badge>
+                  {/* <Badge variant="secondary">Best Results</Badge> */}
                 </div>
 
                 <Input

@@ -8,7 +8,7 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-white text-gray-900">
       {/* Navbar */}
-      <header className="flex items-center justify-between px-8 py-4 border-b">
+      <header className="flex items-center justify-between px-8 py-4 border-b sticky top-0 bg-white">
         <Link to="/">
           <h1 className="text-xl font-bold">PrepAI</h1>
         </Link>

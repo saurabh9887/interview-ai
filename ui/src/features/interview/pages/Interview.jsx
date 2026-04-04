@@ -170,7 +170,7 @@ export default function InterviewUI() {
               ))}
             </div>
 
-            <Button className="w-full mt-4">Download Resume</Button>
+            {/* <Button className="w-full mt-4">Download Resume</Button> */}
           </div>
         </aside>
 
