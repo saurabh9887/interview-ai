@@ -13,6 +13,7 @@ app.use(
       "http://localhost:5000",
       "http://localhost:5173",
       "https://interview-ai-qms7.onrender.com",
+      "https://interview-ai-pi-eight.vercel.app",
     ],
     credentials: true,
   }),
