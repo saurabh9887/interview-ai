@@ -12,12 +12,17 @@ export const register = async (data) => {
 };
 
 export const login = async (data) => {
+  debugger;
   const url = `${Base_url}/api/auth/login`;
+
   try {
     const res = await axios.post(url, data, { withCredentials: true });
-    return res.data;
+    return { success: true, data: res.data };
   } catch (error) {
-    console.log(error);
+    // 🔥 Extract backend message safely
+    const message = error.response?.data?.message || "Something went wrong";
+
+    return { success: false, message };
   }
 };
 
@@ -25,6 +30,26 @@ export const logout = async () => {
   const url = `${Base_url}/api/auth/logout`;
   try {
     const res = await axios.get(url, { withCredentials: true });
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const forgotPassword = async (data) => {
+  const url = `${Base_url}/api/auth/forgot-password`;
+  try {
+    const res = await axios.post(url, data, { withCredentials: true });
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const resetPassword = async (data) => {
+  const url = `${Base_url}/api/auth/reset-password`;
+  try {
+    const res = await axios.post(url, data, { withCredentials: true });
     return res;
   } catch (error) {
     console.log(error);

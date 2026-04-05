@@ -8,7 +8,7 @@ import { Link, useNavigate } from "react-router";
 import { z } from "zod";
 import { useAuth } from "../hooks/useAuth";
 import Loader from "@/components/Loader";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { LoaderContext } from "@/components/LoaderContext";
 
 const LoginSchema = z.object({
@@ -24,13 +24,28 @@ const Login = () => {
   } = useForm({ resolver: zodResolver(LoginSchema) });
 
   const { spinner } = useContext(LoaderContext);
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(false);
 
   const navigate = useNavigate();
   const { handleLogin } = useAuth();
 
   const onSubmit = async (data) => {
+    setError(false);
+    debugger;
+
     const res = await handleLogin(data);
-    if (res) navigate("/generate-report");
+
+    if (res.success) {
+      navigate("/generate-report");
+    } else {
+      setError(true);
+      setErrorMessage(res.message);
+    }
+  };
+
+  const handleResetPassword = () => {
+    navigate("/forgot-password");
   };
 
   return (
@@ -98,8 +113,15 @@ const Login = () => {
                   </p>
                 )}
 
-                <p className="text-sm text-right">
-                  <span className="text-primary cursor-pointer hover:underline">
+                <p className="flex justify-between items-center text-sm">
+                  <span className="text-red-600 min-h-[20px]">
+                    {error ? errorMessage : ""}
+                  </span>
+
+                  <span
+                    onClick={handleResetPassword}
+                    className="text-primary cursor-pointer hover:underline ml-auto"
+                  >
                     Forgot password?
                   </span>
                 </p>

@@ -8,6 +8,9 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router";
 import { useAuth } from "../hooks/useAuth";
+import { useContext, useState } from "react";
+import { LoaderContext } from "@/components/LoaderContext";
+import VerifyEmailNotice from "@/components/verifyEmailNotice";
 
 const registerSchema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters"),
@@ -23,14 +26,28 @@ const Register = () => {
   } = useForm({
     resolver: zodResolver(registerSchema),
   });
-
-  const { loader, handleRegister } = useAuth();
+  const [emailSent, setEmailSent] = useState(false);
+  const [userEmail, setUserEmail] = useState("");
+  const { handleRegister } = useAuth();
+  const { spinner } = useContext(LoaderContext);
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     const res = await handleRegister(data);
-    if (res) navigate("/");
+    if (res) {
+      setUserEmail(data.email);
+      setEmailSent(true);
+    }
   };
+
+  if (emailSent) {
+    return (
+      <VerifyEmailNotice
+        email={userEmail}
+        onResend={() => handleRegister({ email: userEmail, resend: true })}
+      />
+    );
+  }
 
   return (
     <main className="min-h-screen grid md:grid-cols-2">
@@ -107,9 +124,9 @@ const Register = () => {
               <Button
                 type="submit"
                 className="w-full cursor-pointer"
-                disabled={loader}
+                disabled={spinner}
               >
-                {loader ? "Creating account..." : "Create Account"}
+                {spinner ? "Creating account..." : "Create Account"}
               </Button>
             </form>
 

@@ -1,6 +1,13 @@
 import { useContext, useEffect } from "react";
 import { AuthContext } from "../auth.context";
-import { getMe, login, logout, register } from "../services/auth.api";
+import {
+  forgotPassword,
+  getMe,
+  login,
+  logout,
+  register,
+  resetPassword,
+} from "../services/auth.api";
 import { LoaderContext } from "@/components/LoaderContext";
 
 export const useAuth = () => {
@@ -15,18 +22,26 @@ export const useAuth = () => {
     setSpinner(true);
 
     try {
-      const data = await login({ email, password });
-      if (!data?.user) return false;
-      setUser(data?.user);
-      setSpinner(false);
-      return true;
+      const res = await login({ email, password });
+
+      if (res.success) {
+        setUser(res.data.user);
+        return { success: true };
+      }
+
+      return {
+        success: false,
+        message: res.message,
+      };
     } catch (error) {
-      console.log(error);
+      return {
+        success: false,
+        message: "Something went wrong",
+      };
     } finally {
       setSpinner(false);
     }
   };
-
   const handleRegister = async ({ username, email, password }) => {
     setSpinner(true);
     try {
@@ -55,6 +70,30 @@ export const useAuth = () => {
     }
   };
 
+  const handleForgetPassword = async (email) => {
+    setSpinner(true);
+    try {
+      await forgotPassword({ email });
+      setSpinner(false);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setSpinner(false);
+    }
+  };
+
+  const handleResetPassword = async (token, password) => {
+    setSpinner(true);
+    try {
+      await resetPassword({ token, password });
+      setSpinner(false);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setSpinner(false);
+    }
+  };
+
   const GetAndSetData = async () => {
     try {
       const data = await getMe();
@@ -66,5 +105,13 @@ export const useAuth = () => {
     }
   };
 
-  return { user, handleLogin, handleRegister, handleLogout, loader };
+  return {
+    user,
+    handleLogin,
+    handleRegister,
+    handleLogout,
+    loader,
+    handleForgetPassword,
+    handleResetPassword,
+  };
 };

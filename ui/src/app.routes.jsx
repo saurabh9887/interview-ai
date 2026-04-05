@@ -8,6 +8,8 @@ import { AppLayout } from "./components/AppLayout";
 import LandingPage from "./components/LandingPage";
 import Dashboard from "./components/dashboard";
 import ReportsPage from "./features/interview/pages/Reports";
+import ForgotPassword from "./components/forgetPassword";
+import ResetPassword from "./components/resetPassword";
 
 export const router = createBrowserRouter([
   {
@@ -17,6 +19,14 @@ export const router = createBrowserRouter([
   {
     path: "/register",
     element: <Register />,
+  },
+  {
+    path: "/forgot-password",
+    element: <ForgotPassword />,
+  },
+  {
+    path: "/reset-password/:token",
+    element: <ResetPassword />,
   },
   {
     path: "/",
