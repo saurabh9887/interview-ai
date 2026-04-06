@@ -135,12 +135,12 @@ export const loginUser = async (req, res) => {
     { expiresIn: "1d" },
   );
 
-  res.cookie("token", token, {
-    httpOnly: true,
-    secure: true,
-    sameSite: "None",
-    path: "/",
-  });
+  // res.cookie("token", token, {
+  //   httpOnly: true,
+  //   secure: true,
+  //   sameSite: "None",
+  //   path: "/",
+  // });
 
   return res.status(200).json({
     message: "User logged in successfully!",
@@ -149,6 +149,7 @@ export const loginUser = async (req, res) => {
       username: user.username,
       email: user.email,
     },
+    token: token,
   });
 };
 

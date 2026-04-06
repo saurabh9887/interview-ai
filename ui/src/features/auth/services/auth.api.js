@@ -1,4 +1,5 @@
 import { Base_url } from "@/Base_Url/Base_url";
+import api from "@/components/apiInstance";
 import axios from "axios";
 
 export const register = async (data) => {
@@ -12,56 +13,33 @@ export const register = async (data) => {
 };
 
 export const login = async (data) => {
-  // debugger;
   const url = `${Base_url}/api/auth/login`;
 
   try {
-    const res = await axios.post(url, data, { withCredentials: true });
+    const res = await axios.post(url, data);
+
+    const token = res.data.token;
+    localStorage.setItem("token", token);
+
     return { success: true, data: res.data };
   } catch (error) {
-    // 🔥 Extract backend message safely
     const message = error.response?.data?.message || "Something went wrong";
-
     return { success: false, message };
   }
 };
 
 export const logout = async () => {
-  const url = `${Base_url}/api/auth/logout`;
-  try {
-    const res = await axios.get(url, { withCredentials: true });
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
+  localStorage.removeItem("token");
 };
 
 export const forgotPassword = async (data) => {
-  const url = `${Base_url}/api/auth/forgot-password`;
-  try {
-    const res = await axios.post(url, data, { withCredentials: true });
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
+  return await api.post("/api/auth/forgot-password", data);
 };
 
 export const resetPassword = async (data) => {
-  const url = `${Base_url}/api/auth/reset-password`;
-  try {
-    const res = await axios.post(url, data, { withCredentials: true });
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
+  return await api.post("/api/auth/reset-password", data);
 };
-
 export const getMe = async () => {
-  const url = `${Base_url}/api/auth/get-me`;
-  try {
-    const res = await axios.get(url, { withCredentials: true });
-    return res.data;
-  } catch (error) {
-    console.log(error);
-  }
+  const res = await api.get("/api/auth/get-me");
+  return res.data;
 };

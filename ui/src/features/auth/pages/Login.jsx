@@ -10,6 +10,7 @@ import { useAuth } from "../hooks/useAuth";
 import Loader from "@/components/Loader";
 import { useContext, useState } from "react";
 import { LoaderContext } from "@/components/LoaderContext";
+import { Eye, EyeClosed } from "lucide-react";
 
 const LoginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -26,6 +27,7 @@ const Login = () => {
   const { spinner } = useContext(LoaderContext);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
   const { handleLogin } = useAuth();
@@ -102,11 +104,23 @@ const Login = () => {
               {/* Password */}
               <div className="space-y-2">
                 <Label>Password</Label>
-                <Input
-                  type="password"
-                  {...register("password")}
-                  placeholder="••••••••"
-                />
+
+                <div className="relative">
+                  <Input
+                    type={showPassword ? "text" : "password"}
+                    {...register("password")}
+                    placeholder="••••••••"
+                    className="pr-10"
+                  />
+
+                  <div
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500"
+                  >
+                    {showPassword ? <Eye size={18} /> : <EyeClosed size={18} />}
+                  </div>
+                </div>
+
                 {errors.password && (
                   <p className="text-sm text-red-500">
                     {errors.password.message}
