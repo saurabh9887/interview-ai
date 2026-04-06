@@ -135,7 +135,11 @@ export const loginUser = async (req, res) => {
     { expiresIn: "1d" },
   );
 
-  res.cookie("token", token);
+  res.cookie("token", token, {
+    httpOnly: true,
+    secure: true, // MUST be true in production
+    sameSite: "None", // MUST be "None" for cross-site
+  });
 
   return res.status(200).json({
     message: "User logged in successfully!",
