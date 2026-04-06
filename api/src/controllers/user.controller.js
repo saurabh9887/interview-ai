@@ -137,8 +137,9 @@ export const loginUser = async (req, res) => {
 
   res.cookie("token", token, {
     httpOnly: true,
-    secure: true, // MUST be true in production
-    sameSite: "None", // MUST be "None" for cross-site
+    secure: true,
+    sameSite: "None",
+    path: "/",
   });
 
   return res.status(200).json({

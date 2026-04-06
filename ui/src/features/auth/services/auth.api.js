@@ -12,7 +12,7 @@ export const register = async (data) => {
 };
 
 export const login = async (data) => {
-  debugger;
+  // debugger;
   const url = `${Base_url}/api/auth/login`;
 
   try {
