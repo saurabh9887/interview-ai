@@ -2,8 +2,7 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "/index.html",
-      "rewrites": [{ "source": "/(.*)", "destination": "/" }]
+      "dest": "/index.html"
     }
   ]
 }
