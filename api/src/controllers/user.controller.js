@@ -15,6 +15,8 @@ export const registerUser = async (req, res) => {
     $or: [{ username }, { email }],
   });
 
+  // console.log("isUserAlreadyExists", isUserAlreadyExists);
+
   if (isUserAlreadyExists) {
     if (!isUserAlreadyExists.isVerified) {
       const verificationToken = crypto.randomBytes(32).toString("hex");
@@ -29,7 +31,44 @@ export const registerUser = async (req, res) => {
       await sendEmail({
         to: isUserAlreadyExists.email,
         subject: "Verify your email",
-        html: `Click here to verify: ${verificationLink}`,
+        html: `
+  <div style="font-family: Arial, sans-serif; background-color: #f4f7fb; padding: 40px 0;">
+    <div style="max-width: 600px; margin: auto; background: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+      
+      <!-- Header -->
+      <div style="background: #4f46e5; padding: 20px; text-align: center; color: white;">
+        <h1 style="margin: 0;">PrepAI</h1>
+        <p style="margin: 5px 0 0; font-size: 14px;">Smarter Interview Preparation</p>
+      </div>
+
+      <!-- Body -->
+      <div style="padding: 30px; color: #333;">
+        <h2 style="margin-top: 0;">Verify your email</h2>
+        <p style="font-size: 15px; line-height: 1.6;">
+          Thanks for signing up with <strong>PrepAI</strong>. Please confirm your email address to get started.
+        </p>
+
+        <!-- Button -->
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="${verificationLink}" 
+             style="background: #4f46e5; color: #ffffff; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-size: 16px; display: inline-block;">
+            Verify Email
+          </a>
+        </div>
+
+        <p style="font-size: 13px; color: #666;">
+          This link will expire in 1 hour. If you did not create an account, you can safely ignore this email.
+        </p>
+      </div>
+
+      <!-- Footer -->
+      <div style="background: #f4f7fb; padding: 15px; text-align: center; font-size: 12px; color: #888;">
+        © ${new Date().getFullYear()} PrepAI. All rights reserved.
+      </div>
+
+    </div>
+  </div>
+`,
       });
 
       return res.status(200).json({
@@ -47,7 +86,7 @@ export const registerUser = async (req, res) => {
 
   const verificationToken = crypto.randomBytes(32).toString("hex");
 
-  const newUser = await userModel.create({
+  await userModel.create({
     username,
     email,
     password: hashedPassword,

@@ -71,10 +71,10 @@ const AppSidebar = () => {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
-              <Link to="/" className="flex items-center gap-2">
+              <span className="flex items-center gap-2">
                 <AvatarWithBadge />
                 <span>Prep AI</span>
-              </Link>
+              </span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
